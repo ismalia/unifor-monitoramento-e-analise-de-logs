@@ -1,0 +1,55 @@
+services:
+  log-generator:
+    build:
+      context: .
+    container_name: airport-log-generator
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - logging-network
+
+  loki:
+    image: grafana/loki:2.7.7
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./loki-config.yaml:/etc/loki/local-config.yaml
+      - ./loki-data:/loki
+    restart: unless-stopped
+    networks:
+      - logging-network
+
+  promtail:
+    image: grafana/promtail:2.7.7
+    container_name: promtail
+    volumes:
+      - ./promtail-config.yaml:/etc/promtail/config.yaml
+      - ./logs:/app/logs
+    command: -config.file=/etc/promtail/config.yaml
+    depends_on:
+      - loki
+    restart: unless-stopped
+    networks:
+      - logging-network
+
+  grafana:
+    image: grafana/grafana:11.6.1
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./grafana-storage:/var/lib/grafana
+    restart: unless-stopped
+    networks:
+      - logging-network
+
+networks:
+  logging-network:
+    driver: bridge
