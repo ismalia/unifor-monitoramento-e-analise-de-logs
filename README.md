@@ -16,14 +16,49 @@ Repositório dedicado à disciplina **Monitoramento e análise de logs**, minist
 1. **Grafana**: Plataforma de visualização (porta 3000).
 1. **Loki**: Sistema de agregação de logs (porta 3100).
 1. **Promtail**: Agente de coleta de logs.
-1. **Airport Log Generator**: Script em Python 3.13 que gera logs simulados de um aeroporto.
+1. **Airport Log Generator**: Script em Python 3.13 que gera logs simulados de diversos aeroportos.
 
-### Pré-requisitos
+### Descrição dos arquivos
+
+- `airport_log_generator.py`: Script que gera os logs dos aeroportos.
+- `airport-dashboard.json`: JSON com as configurações do dashboard do Grafana.
+- `compose.yaml`: Define todos os serviços e suas configurações.
+- `Dockerfile`: Dockerfile usado para criar a imagem do serviço gerador de logs.
+- `loki-config.yaml`: Configurações de agregação de logs do Loki.
+- `promtail-config.yaml`: Configurações de coleta de logs do Promtail.
+
+### Painéis de monitoramento
+
+Visualizações disponíveis no dashboard do Grafana.
+
+#### Log Volume by Level
+
+![Log Volume by Level](imgs/log-volume-by-level.png)
+
+#### Events by Type
+
+![Events by Type](imgs/events-by-type.png)
+
+#### Activity by Airport
+
+![Activity by Airport](imgs/activity-by-airport.png)
+
+#### Warning & Error Logs
+
+![Warning & Error Logs](imgs/warning-and-error-logs.png)
+
+#### Flight Updates
+
+![Flight Updates](imgs/flight-updates.png)
+
+### Instruções para executar localmente
+
+#### Pré-requisitos
 
 - Docker (v20.10 ou maior)
 - Docker Compose (v2.0 ou maior)
 
-### Instruções de execução
+#### Iniciando a execução
 
 1. Execute o sistema usando Docker Compose:
 
@@ -35,7 +70,7 @@ docker compose up -d
     - Username: `admin`
     - Password: `admin`
 
-![Login](imgs/grafana-login.png)
+![Login](imgs/login.png)
 
 3. Adicione uma nova conexão com o Loki:
     - Acesse *Connections > Add new connection*.
@@ -44,16 +79,16 @@ docker compose up -d
     - Em *Settings*, configure a Connection URL como `http://loki:3100`.
     - No final de *Settings*, pressione o botão *Save & test* para validar se a conexão com o Loki foi bem sucedida.
 
-![Datasource successfully connected](imgs/grafana-data-source-successfully-connected.png)
+![Datasource successfully connected](imgs/data-source-successfully-connected.png)
 
 4. Importe o dashboard:
     - Acesse *Dashboards*.
     - Clique no botão no canto superior à direita, *New*, e selecione **Import**.
     - Faça o upload do arquivo `airport-dashboard.json`, ou copie e cole o conteúdo desse arquivo. Em seguida, clique em *Import*.
 
-![Import dashboard](imgs/grafana-import-dashboard.png)
+![Import dashboard](imgs/import-dashboard.png)
 
-### Parando a execução
+#### Parando a execução
 
 Para parar todos os serviços:
 
@@ -67,3 +102,44 @@ Para parar todos os serviços e remover todos os dados:
 docker compose down
 rm -rf grafana-storage logs loki-data
 ```
+
+### Customizações
+
+#### Modificando o gerador de logs
+
+É possível customizar o gerador de logs editando o arquivo `airport_log_generator.py`. Pode-se modificar:
+
+- A lista de aeroportos;
+- Os tipos de eventos gerados;
+- A frequência na qual os logs são gerados;
+- A distribuição de log levels.
+
+Após fazer as modificações, é necessário rebuildar e reiniciar os containers:
+
+```bash
+docker compose down
+docker compose up -d --build
+```
+
+#### Criando painéis adicionais
+
+É possível criar mais painéis no dashboard do Grafana para visualizar aspectos específicos dos logs dos aeroportos que não estejam cobertos pelos painéis em `airport-dashboard.json`.
+
+1. Faça login no Grafana.
+1. Acesse *Dashboard > Airport Operations Dashboard*.
+1. No canto superior direito, acesse *Edit > Add > Visualization*.
+1. Configure o painel com queries do Loki.
+1. Salve o dashboard.
+
+![New panel](imgs/new-panel.png)
+
+### Troubleshooting
+
+1. Não consigo visualizar os dados no Grafana.
+    - Verifique se todos os serviços estão rodando: `docker compose ps`.
+    - Verifique se há erros nos logs do Loki: `docker compose logs loki`.
+    - Verifique se o Promtail está coletando os logs: `docker compose logs promtail`.
+
+2. O gerador de logs não está produzindo logs.
+    - Verifique os logs do serviço *log-generator*: `docker compose logs log-generator`.
+    - Verifique se o diretório dos logs tem as permissões necessárias de escrita.
