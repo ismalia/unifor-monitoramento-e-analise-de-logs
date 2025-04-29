@@ -104,7 +104,7 @@ docker compose up -d
     - Em *Settings*, configure a Connection URL como `http://loki:3100`.
     - No final de *Settings*, pressione o botão *Save & test* para validar se a conexão com o Loki foi bem sucedida.
 
-![Datasource successfully connected](imgs/data-source-successfully-connected.png)
+![Loki settings](imgs/loki-settings.png)
 
 4. Importe o dashboard:
     - Acesse *Dashboards*.
