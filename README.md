@@ -2,6 +2,31 @@
 
 Repositório dedicado à disciplina **Monitoramento e análise de logs**, ministrada pelo professor Nauber Gois na Especialização em Engenharia de Software com DevOps, curso de pós-graduação lato sensu da Universidade de Fortaleza (UNIFOR).
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Índice**  *gerado com [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Airport Logging System](#airport-logging-system)
+  - [Equipe](#equipe)
+  - [Componentes do sistema](#componentes-do-sistema)
+  - [Descrição dos arquivos](#descri%C3%A7%C3%A3o-dos-arquivos)
+  - [Painéis de monitoramento](#pain%C3%A9is-de-monitoramento)
+    - [Log Volume by Level](#log-volume-by-level)
+    - [Events by Type](#events-by-type)
+    - [Activity by Airport](#activity-by-airport)
+    - [Warning & Error Logs](#warning--error-logs)
+    - [Flight Updates](#flight-updates)
+  - [Instruções para executar localmente](#instru%C3%A7%C3%B5es-para-executar-localmente)
+    - [Pré-requisitos](#pr%C3%A9-requisitos)
+    - [Iniciando a execução](#iniciando-a-execu%C3%A7%C3%A3o)
+    - [Parando a execução](#parando-a-execu%C3%A7%C3%A3o)
+  - [Customizações](#customiza%C3%A7%C3%B5es)
+    - [Modificando o gerador de logs](#modificando-o-gerador-de-logs)
+    - [Criando painéis adicionais](#criando-pain%C3%A9is-adicionais)
+  - [Troubleshooting](#troubleshooting)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Airport Logging System
 
 ### Equipe
